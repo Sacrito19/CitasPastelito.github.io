@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cita · Aceptar & Rechazar</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background: linear-gradient(145deg, #f9e7e0 0%, #f5d6cc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            margin: 0;
+            position: relative;
+        }
+
+        #paso-alegre h2 {
+            margin-top: 30px;      /* 👈 Más abajo */
+            margin-bottom: 30px;   /* 👈 Espacio debajo */
+            margin-left: 0px;      /* 👈 Mueve a la derecha */
+            margin-right: 0px;     /* 👈 Mueve a la izquierda */
+            text-align: center;    /* 👈 Centrado horizontal */
+}
+        .card {
+            background: #fffaf5;
+            max-width: 600px;
+            width: 100%;
+            border-radius: 48px 48px 32px 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.06);
+            padding: 32px 28px 28px;
+            transition: all 0.2s ease;
+            border: 1px solid #f0dbd0;
+            backdrop-filter: blur(2px);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .card-imagen {
+            width: 100%;
+            border-radius: 32px;
+            margin-bottom: 24px;
+            background: #edd9cf;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            box-shadow: 0 6px 14px rgba(150, 90, 70, 0.15);
+            display: block;
+        }
+        .card-imagen-placeholder {
+            background: #e6d3c7;
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: #a48474;
+            font-weight: 500;
+            aspect-ratio: 4/3;
+            margin-bottom: 24px;
+            box-shadow: inset 0 0 0 1px #dac2b4;
+        }
+        h2, .titulo-rec {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #4d2e24;
+            letter-spacing: -0.3px;
+            margin-bottom: 12px;
+        }
+        .texto-desc {
+            font-size: 1.2rem;
+            color: #5f3d30;
+            margin-bottom: 28px;
+            font-weight: 450;
+            background: #f3e5dd;
+            padding: 8px 16px;
+            border-radius: 60px;
+            display: inline-block;
+        }
+        .botonera {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 16px 0 6px;
+            position: relative;
+            min-height: 80px;
+            width: 100%;
+        }
+        .btn {
+            border: none;
+            padding: 14px 38px;
+            border-radius: 80px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #3a251e;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #b99a88, 0 6px 12px rgba(90, 50, 30, 0.12);
+            letter-spacing: 0.5px;
+            min-width: 130px;
+            flex: 0 1 auto;
+        }
+        
+        /* ==============================================
+           BOTÓN ACEPTAR - PÁGINA PRINCIPAL (izquierda)
+           ============================================== */
+        .btn-aceptar-inicial {
+            background: #ffb49a;
+            color: #3a1f16;
+            box-shadow: 0 4px 0 #c47a62;
+            position: relative;
+            z-index: 1;
+            transition: all 0.2s;
+            /* 👇 AJUSTA ESTO MANUALMENTE */
+            margin-left: -180px;
+            margin-top: 0px;
+        }
+        .btn-aceptar-inicial:hover {
+            background: #ffa585;
+            transform: scale(1.02);
+            box-shadow: 0 6px 0 #b36b53, 0 10px 18px rgba(180, 80, 40, 0.25);
+        }
+        .btn-aceptar-inicial:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b36b53;
+        }
+        
+        /* ==============================================
+           BOTÓN ACEPTAR - CELEBRACIÓN (centrado)
+           ============================================== */
+        .btn-aceptar-celebracion {
+            background: #ffb49a;
+            color: #3a1f16;
+            box-shadow: 0 4px 0 #c47a62;
+            position: relative;
+            z-index: 1;
+            transition: all 0.2s;
+            /* 👇 CENTRADO */
+            margin: 0 auto;
+            display: block;
+        }
+        .btn-aceptar-celebracion:hover {
+            background: #ffa585;
+            transform: scale(1.02);
+            box-shadow: 0 6px 0 #b36b53, 0 10px 18px rgba(180, 80, 40, 0.25);
+        }
+        .btn-aceptar-celebracion:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b36b53;
+        }
+        
+        /* ==============================================
+           BOTÓN ACEPTAR - REINICIAR (derecha)
+           ============================================== */
+        .btn-aceptar-reiniciar {
+            background: #ffb49a;
+            color: #3a1f16;
+            box-shadow: 0 4px 0 #c47a62;
+            position: relative;
+            z-index: 1;
+            transition: all 0.2s;
+            /* 👇 AJUSTA ESTO MANUALMENTE */
+            margin-left: auto;
+            margin-right: 0px;
+        }
+        .btn-aceptar-reiniciar:hover {
+            background: #ffa585;
+            transform: scale(1.02);
+            box-shadow: 0 6px 0 #b36b53, 0 10px 18px rgba(180, 80, 40, 0.25);
+        }
+        .btn-aceptar-reiniciar:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #b36b53;
+        }
+        
+        /* ==============================================
+           BOTÓN RECHAZAR (posición absoluta - derecha)
+           ============================================== */
+        .btn-rechazar {
+            background: #d6c0b5;
+            box-shadow: 0 4px 0 #a88879;
+            cursor: pointer;
+            position: absolute !important;
+            transition: none !important;
+            user-select: none;
+            z-index: 10;
+            margin: 0;
+            flex: 0 1 auto;
+        }
+        .btn-rechazar:hover {
+            background: #d6c0b5;
+            box-shadow: 0 4px 0 #a88879;
+            transform: none;
+        }
+        
+        .oculto {
+            display: none !important;
+        }
+        .plan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 14px;
+            margin: 20px 0 10px;
+        }
+        .plan-item {
+            background: #f5e7df;
+            border-radius: 60px;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 500;
+            color: #422b22;
+            border: 1px solid #dfc9bc;
+            transition: 0.1s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(120, 70, 50, 0.08);
+            font-size: 1rem;
+        }
+        .plan-item.seleccionado {
+            background: #ffc8b3;
+            border-color: #b86f56;
+            box-shadow: 0 0 0 2px #d48d74;
+        }
+        .plan-item input[type="radio"], 
+        .plan-item input[type="checkbox"] {
+            display: none;
+        }
+        .sub-opciones {
+            margin: 18px 0 14px;
+            padding: 14px 16px;
+            background: #f2e1d7;
+            border-radius: 32px;
+        }
+        .sub-opciones label {
+            display: inline-block;
+            margin-right: 24px;
+            font-weight: 450;
+            color: #3f2b22;
+        }
+        .input-texto {
+            background: #fffaf5;
+            border: 1px solid #d6bcae;
+            border-radius: 60px;
+            padding: 12px 18px;
+            width: 100%;
+            font-size: 1rem;
+            color: #2f1c14;
+            margin: 6px 0 12px;
+        }
+        .input-texto:focus {
+            outline: 2px solid #dba58b;
+            border-color: transparent;
+        }
+        .fila-fecha {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 18px 0 12px;
+        }
+        .fila-fecha label {
+            font-weight: 500;
+            color: #4f3227;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+        .fila-fecha input {
+            background: #fffaf5;
+            border: 1px solid #d6bcae;
+            border-radius: 40px;
+            padding: 10px 16px;
+            font-size: 1rem;
+        }
+        .btn-siguiente {
+            background: #e7c3b2;
+            padding: 14px 32px;
+            border-radius: 60px;
+            border: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #2f1c14;
+            box-shadow: 0 4px 0 #b5907d;
+            margin: 18px 0 8px;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .btn-siguiente:hover {
+            background: #e0b8a4;
+            transform: scale(1.01);
+        }
+        .invitacion-info {
+            background: #f6e7de;
+            border-radius: 40px;
+            padding: 20px 22px;
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+        .invitacion-info p {
+            font-size: 1.1rem;
+            color: #2f1c14;
+            margin: 8px 0;
+        }
+        .invitacion-info strong {
+            color: #4d2e24;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mt-2 { margin-top: 16px; }
+        .mb-1 { margin-bottom: 8px; }
+        .w-full { width: 100%; }
+        .flex { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        hr { border: 1px dashed #dcc2b5; margin: 22px 0 16px; }
+
+        /* Estilos para la captura */
+        #captura-invitacion {
+            background: #fffaf5;
+            padding: 20px;
+            border-radius: 40px;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #captura-invitacion .invitacion-info {
+            background: #f6e7de;
+            border-radius: 40px;
+            padding: 20px 22px;
+            margin: 12px 0;
+        }
+        #captura-invitacion img {
+            width: 100%;
+            border-radius: 32px;
+            margin-top: 12px;
+        }
+        .btn-descarga {
+            background: #b8a091;
+            color: #2f1c14;
+            box-shadow: 0 4px 0 #7f6a5d;
+        }
+        .btn-descarga:hover {
+            background: #a88d7d;
+            transform: scale(1.02);
+        }
+
+        /* Contenedor para posicionamiento absoluto del botón */
+        #botoneraInicial {
+            position: relative;
+            min-height: 80px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app" class="card">
+    <!-- ====== PASO 0: CITA INICIAL ====== -->
+    <div id="paso-inicial">
+        <img src="imagenes/perro.jpg" alt="perro" class="card-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="card-imagen-placeholder oculto">perro.jpg</div>
+        <h2>¿Te gustaría tener una cita conmigo?</h2>
+        <div class="botonera" id="botoneraInicial">
+            <button class="btn btn-aceptar-inicial" id="btnAceptarInicial">Aceptar</button>
+            <button class="btn btn-rechazar" id="btnRechazar">Rechazar</button>
+        </div>
+    </div>
+
+    <!-- ====== PASO 1: ACEPTASTE WUHUUU ====== -->
+    <div id="paso-alegre" class="oculto">
+        <img src="imagenes/alegre.jpg" alt="alegre" class="card-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="card-imagen-placeholder oculto">alegre.jpg</div>
+        <h2>¡Aceptaste wuhuuuu!</h2>
+        <div class="botonera">
+            <button class="btn btn-aceptar-celebracion" id="btnSiguientePlan">Aceptar</button>
+        </div>
+    </div>
+
+    <!-- ====== PASO 2: ELIGE EL PLAN ====== -->
+    <div id="paso-plan" class="oculto">
+        <h2>Elige el plan</h2>
+        <div class="plan-grid" id="planGrid">
+            <div class="plan-item" data-plan="pelicula">🎬 Ver película</div>
+            <div class="plan-item" data-plan="serie">📺 Ver serie</div>
+            <div class="plan-item" data-plan="jugar">🎮 Jugar juntos</div>
+            <div class="plan-item" data-plan="comer">🍽️ Comer juntos</div>
+            <div class="plan-item" data-plan="arcilla">🏺 Figuras de arcilla</div>
+            <div class="plan-item" data-plan="dormir">😴 Dormir juntos</div>
+            <div class="plan-item" data-plan="salir">🌳 Salir juntos</div>
+        </div>
+        <div id="subOpcionesContainer" class="oculto sub-opciones"></div>
+
+        <div class="fila-fecha">
+            <label>📅 Fecha <input type="date" id="fechaCita" value="2026-07-20"></label>
+            <label>⏰ Hora <input type="time" id="horaCita" value="19:00"></label>
+        </div>
+        <button class="btn-siguiente w-full" id="btnGenerarInvitacion">Aceptar plan</button>
+    </div>
+
+    <!-- ====== PASO 3: INVITACIÓN FINAL ====== -->
+    <div id="paso-invitacion" class="oculto">
+        <h2>💌 Tenemos una cita</h2>
+        <div id="captura-invitacion">
+            <div id="invitacionDetalles" class="invitacion-info"></div>
+            <img src="imagenes/cita.jpg" alt="cita" class="card-imagen" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="card-imagen-placeholder oculto">cita.jpg</div>
+        </div>
+        <div class="botonera">
+            <button class="btn btn-descarga" id="btnDescargarInvitacion">⬇️ Descargar imagen</button>
+            <button class="btn btn-aceptar-reiniciar" id="btnReiniciar">✨ Otra cita</button>
+        </div>
+    </div>
+</div>
+
+<!-- Librería html2canvas para capturar el recuadro -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+    (function() {
+        const $ = (s) => document.querySelector(s);
+        const $$ = (s) => document.querySelectorAll(s);
+
+        const pasoInicial = $('#paso-inicial');
+        const pasoAlegre = $('#paso-alegre');
+        const pasoPlan = $('#paso-plan');
+        const pasoInvitacion = $('#paso-invitacion');
+        const btnAceptarInicial = $('#btnAceptarInicial');
+        const btnRechazar = $('#btnRechazar');
+        const btnSiguientePlan = $('#btnSiguientePlan');
+        const btnGenerarInvitacion = $('#btnGenerarInvitacion');
+        const btnReiniciar = $('#btnReiniciar');
+        const btnDescargar = $('#btnDescargarInvitacion');
+        const planGrid = $('#planGrid');
+        const subContainer = $('#subOpcionesContainer');
+        const fechaInput = $('#fechaCita');
+        const horaInput = $('#horaCita');
+        const invitacionDetalles = $('#invitacionDetalles');
+        const capturaDiv = $('#captura-invitacion');
+        const card = document.querySelector('.card');
+        const botonera = $('#botoneraInicial');
+
+        let planSeleccionado = '';
+        let datosSub = {};
+
+        // ---------- MÚSICA DE FONDO ----------
+        let musicaFondo = null;
+        let musicaIniciada = false;
+
+        function iniciarMusicaFondo() {
+            if (musicaIniciada) return;
+            try {
+                musicaFondo = new Audio('sonidos/musica.mp3');
+                musicaFondo.loop = true;
+                musicaFondo.volume = 0.15;
+                musicaFondo.play().catch(e => {
+                    console.log('Música de fondo no disponible:', e);
+                });
+                musicaIniciada = true;
+            } catch (e) {
+                console.log('Error al cargar música de fondo:', e);
+            }
+        }
+
+        document.addEventListener('click', function() {
+            iniciarMusicaFondo();
+        }, { once: false });
+
+        document.addEventListener('click', function() {
+            if (!musicaIniciada) {
+                iniciarMusicaFondo();
+            }
+        });
+
+        // ---------- AUDIO CLICK ----------
+        function reproducirClick() {
+            try {
+                const audio = new Audio('sonidos/click.mp3');
+                audio.volume = 0.5;
+                audio.play().catch(e => console.log('audio no disponible'));
+            } catch (e) {}
+        }
+
+        // ---------- NAVEGACIÓN ----------
+        function mostrarPaso(pasoId) {
+            [pasoInicial, pasoAlegre, pasoPlan, pasoInvitacion].forEach(el => el.classList.add('oculto'));
+            const target = document.getElementById(pasoId);
+            if (target) target.classList.remove('oculto');
+            
+            if (pasoId === 'paso-inicial') {
+                setTimeout(() => restaurarBotonRechazar(), 50);
+            }
+        }
+
+        // ---------- BOTÓN RECHAZAR ----------
+        let btnX = 0;
+        let btnY = 0;
+        let btnWidth = 130;
+        let btnHeight = 60;
+        let botoneraWidth = 0;
+        let botoneraHeight = 0;
+        let isInitialized = false;
+
+        function restaurarBotonRechazar() {
+            if (!btnRechazar) return;
+            
+            const botoneraRect = botonera.getBoundingClientRect();
+            const btnRect = btnRechazar.getBoundingClientRect();
+            
+            botoneraWidth = botoneraRect.width;
+            botoneraHeight = botoneraRect.height;
+            btnWidth = btnRect.width || 130;
+            btnHeight = btnRect.height || 60;
+            
+            // Posición: a la derecha
+            const aceptarBtn = document.getElementById('btnAceptarInicial');
+            if (aceptarBtn) {
+                const aceptarRect = aceptarBtn.getBoundingClientRect();
+                const aceptarLeft = aceptarRect.left - botoneraRect.left;
+                const aceptarWidth = aceptarRect.width;
+                const gap = 18;
+                
+                btnX = aceptarLeft + aceptarWidth + gap;
+                btnY = (botoneraHeight - btnHeight) / 2;
+            } else {
+                btnX = botoneraWidth - btnWidth - 5;
+                btnY = (botoneraHeight - btnHeight) / 2;
+            }
+            
+            const padding = 5;
+            btnX = Math.max(padding, Math.min(btnX, botoneraWidth - btnWidth - padding));
+            btnY = Math.max(padding, Math.min(btnY, botoneraHeight - btnHeight - padding));
+            
+            btnRechazar.style.left = btnX + 'px';
+            btnRechazar.style.top = btnY + 'px';
+            isInitialized = true;
+        }
+
+        function moverBotonRechazar(e) {
+            if (!btnRechazar || pasoInicial.classList.contains('oculto') || !isInitialized) return;
+
+            const botoneraRect = botonera.getBoundingClientRect();
+            
+            if (botoneraWidth === 0) {
+                botoneraWidth = botoneraRect.width;
+                botoneraHeight = botoneraRect.height;
+            }
+            
+            if (e.clientX < botoneraRect.left || e.clientX > botoneraRect.right || 
+                e.clientY < botoneraRect.top || e.clientY > botoneraRect.bottom) {
+                return;
+            }
+
+            const mouseX = e.clientX - botoneraRect.left;
+            const mouseY = e.clientY - botoneraRect.top;
+            
+            const centroBtnX = btnX + btnWidth / 2;
+            const centroBtnY = btnY + btnHeight / 2;
+            
+            const dx = centroBtnX - mouseX;
+            const dy = centroBtnY - mouseY;
+            const distancia = Math.sqrt(dx * dx + dy * dy);
+            
+            const ACTIVATION_DISTANCE = 180;
+            
+            if (distancia < ACTIVATION_DISTANCE) {
+                const magnitud = Math.sqrt(dx * dx + dy * dy) || 1;
+                const factor = Math.min(1, (ACTIVATION_DISTANCE - distancia) / ACTIVATION_DISTANCE);
+                const velocidad = 15 + factor * 35;
+                
+                const moveX = (dx / magnitud) * velocidad;
+                const moveY = (dy / magnitud) * velocidad;
+                
+                btnX += moveX;
+                btnY += moveY;
+                
+                const padding = 5;
+                const maxX = botoneraWidth - btnWidth - padding;
+                const maxY = botoneraHeight - btnHeight - padding;
+                
+                if (btnX < padding) {
+                    btnX = padding;
+                    btnX += Math.abs(moveX) * 0.3;
+                } else if (btnX > maxX) {
+                    btnX = maxX;
+                    btnX -= Math.abs(moveX) * 0.3;
+                }
+                
+                if (btnY < padding) {
+                    btnY = padding;
+                    btnY += Math.abs(moveY) * 0.3;
+                } else if (btnY > maxY) {
+                    btnY = maxY;
+                    btnY -= Math.abs(moveY) * 0.3;
+                }
+                
+                btnX = Math.max(padding, Math.min(btnX, maxX));
+                btnY = Math.max(padding, Math.min(btnY, maxY));
+                
+                btnRechazar.style.left = btnX + 'px';
+                btnRechazar.style.top = btnY + 'px';
+            }
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            if (!pasoInicial.classList.contains('oculto')) {
+                moverBotonRechazar(e);
+            }
+        }, { passive: true });
+
+        btnAceptarInicial.addEventListener('click', function() {
+            reproducirClick();
+            mostrarPaso('paso-alegre');
+        });
+
+        btnSiguientePlan.addEventListener('click', function() {
+            reproducirClick();
+            mostrarPaso('paso-plan');
+            planSeleccionado = '';
+            datosSub = {};
+            subContainer.classList.add('oculto');
+            subContainer.innerHTML = '';
+            document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('seleccionado'));
+        });
+
+        planGrid.addEventListener('click', function(e) {
+            const item = e.target.closest('.plan-item');
+            if (!item) return;
+            const plan = item.dataset.plan;
+            planSeleccionado = plan;
+            document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('seleccionado'));
+            item.classList.add('seleccionado');
+
+            let html = '';
+            if (plan === 'pelicula' || plan === 'serie') {
+                const label = plan === 'pelicula' ? 'película' : 'serie';
+                html = `
+                    <p style="font-weight:500; margin-bottom:6px;">¿Quién elige la ${label}?</p>
+                    <label><input type="radio" name="eleccion" value="yo" checked> Yo elijo</label>
+                    <label><input type="radio" name="eleccion" value="abner"> Que la elija Abner</label>
+                `;
+            } else if (plan === 'jugar' || plan === 'comer') {
+                const placeholder = plan === 'jugar' ? '¿Qué jugaremos?' : '¿Qué comeremos?';
+                html = `
+                    <label style="display:block; margin-top:4px;">📝 <input type="text" id="textoPlan" class="input-texto" placeholder="${placeholder}"></label>
+                `;
+            } else {
+                subContainer.classList.add('oculto');
+                subContainer.innerHTML = '';
+                return;
+            }
+            subContainer.classList.remove('oculto');
+            subContainer.innerHTML = html;
+        });
+
+        btnGenerarInvitacion.addEventListener('click', function() {
+            reproducirClick();
+
+            if (!planSeleccionado) {
+                alert('Selecciona un plan primero');
+                return;
+            }
+
+            let subInfo = '';
+            const plan = planSeleccionado;
+
+            if (plan === 'pelicula' || plan === 'serie') {
+                const radios = document.querySelectorAll('input[name="eleccion"]');
+                let valor = 'yo';
+                radios.forEach(r => { if (r.checked) valor = r.value; });
+                const quien = valor === 'yo' ? 'Tú eliges' : 'Abner elige';
+                subInfo = `${plan === 'pelicula' ? 'Película' : 'Serie'}: ${quien}`;
+            } else if (plan === 'jugar' || plan === 'comer') {
+                const texto = document.getElementById('textoPlan');
+                const val = texto ? texto.value.trim() : '';
+                subInfo = val ? `${plan === 'jugar' ? 'Juego' : 'Comida'}: ${val}` : `${plan === 'jugar' ? 'Juego' : 'Comida'}: (sin especificar)`;
+            } else {
+                const nombres = {
+                    'arcilla': 'Figuras de arcilla',
+                    'dormir': 'Dormir juntos',
+                    'salir': 'Salir juntos'
+                };
+                subInfo = nombres[plan] || plan;
+            }
+
+            const fecha = fechaInput.value || '2026-07-20';
+            const hora = horaInput.value || '19:00';
+
+            const nombrePlan = {
+                'pelicula': 'Ver película',
+                'serie': 'Ver serie',
+                'jugar': 'Jugar juntos',
+                'comer': 'Comer juntos',
+                'arcilla': 'Figuras de arcilla',
+                'dormir': 'Dormir juntos',
+                'salir': 'Salir juntos'
+            }[plan] || plan;
+
+            const fechaFormateada = fecha.split('-').reverse().join('/');
+            const horaFormateada = hora.slice(0,5);
+
+            invitacionDetalles.innerHTML = `
+                <p><strong>📌 Plan:</strong> ${nombrePlan}</p>
+                <p><strong>📋 Detalle:</strong> ${subInfo}</p>
+                <p><strong>📅 Fecha:</strong> ${fechaFormateada}</p>
+                <p><strong>⏰ Hora:</strong> ${horaFormateada}</p>
+            `;
+
+            window.respuestasCita = {
+                plan: plan,
+                detalle: subInfo,
+                fecha: fecha,
+                hora: hora
+            };
+            console.log('Respuestas guardadas:', window.respuestasCita);
+
+            mostrarPaso('paso-invitacion');
+        });
+
+        btnDescargar.addEventListener('click', function() {
+            reproducirClick();
+            
+            html2canvas(capturaDiv, {
+                scale: 2,
+                backgroundColor: '#fffaf5',
+                allowTaint: true,
+                useCORS: true,
+                logging: false
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'invitacion-cita.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(error => {
+                console.error('Error al generar la imagen:', error);
+                alert('No se pudo generar la imagen. Intenta de nuevo.');
+            });
+        });
+
+        btnReiniciar.addEventListener('click', function() {
+            reproducirClick();
+            planSeleccionado = '';
+            datosSub = {};
+            subContainer.classList.add('oculto');
+            subContainer.innerHTML = '';
+            document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('seleccionado'));
+            fechaInput.value = '2026-07-20';
+            horaInput.value = '19:00';
+            isInitialized = false;
+            mostrarPaso('paso-inicial');
+        });
+
+        mostrarPaso('paso-inicial');
+        
+        setTimeout(() => {
+            restaurarBotonRechazar();
+        }, 100);
+
+        window.addEventListener('resize', function() {
+            if (!pasoInicial.classList.contains('oculto')) {
+                isInitialized = false;
+                setTimeout(() => restaurarBotonRechazar(), 50);
+            }
+        });
+
+        const resizeObserver = new ResizeObserver(() => {
+            if (!pasoInicial.classList.contains('oculto')) {
+                isInitialized = false;
+                setTimeout(() => restaurarBotonRechazar(), 50);
+            }
+        });
+        resizeObserver.observe(botonera);
+    })();
+</script>
+</body>
+</html>
